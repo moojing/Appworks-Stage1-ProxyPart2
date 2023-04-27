@@ -4,38 +4,26 @@ pragma solidity ^0.8.17;
 import { Slots } from "./SlotManipulate.sol";
 import { BasicProxy } from "./BasicProxy.sol";
 
-error Transparent__NotAdmin();
-
 contract Transparent is Slots, BasicProxy {
 
-  bytes32 public constant ADMIN_SLOT = bytes32(uint256(keccak256('eip1967.proxy.admin')) - 1);
-
   constructor(address _implementation) BasicProxy(_implementation) {
-    _setSlotToAddress(ADMIN_SLOT, msg.sender);
+    // TODO: set admin address to Admin slot
   }
 
   modifier onlyAdmin {
-    require(msg.sender == _getAdmin(), "Transparent: not admin");
+    // TODO: finish onlyAdmin modifier
     _;
   }
 
-  function _getAdmin() internal view returns (address) {
-    return _getSlotToAddress(ADMIN_SLOT);
-  }
-
   function upgradeTo(address _newImpl) public override onlyAdmin {
-    super.upgradeTo(_newImpl);
+    // TODO: rewriet upgradeTo
   }
 
   function upgradeToAndCall(address _newImpl, bytes memory data) public override onlyAdmin {
-    super.upgradeToAndCall(_newImpl, data);
+    // TODO: rewriet upgradeToAndCall
   }
 
   fallback() external payable override {
-    if (msg.sender == _getAdmin()) {
-      revert();
-    } else {
-      _delegate(_getImpl());
-    }
+    // rewrite fallback
   }
 }
