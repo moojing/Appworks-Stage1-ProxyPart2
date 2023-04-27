@@ -8,12 +8,10 @@ import { Proxiable } from "../Proxy/Proxiable.sol";
 contract ClockUUPS is Clock, Proxiable {
 
   function upgradeTo(address _newImpl) public {
-    updateCodeAddress(_newImpl);
+    // TODO: upgrade to new implementation
   }
 
   function upgradeToAndCall(address _newImpl, bytes memory data) public {
-    updateCodeAddress(_newImpl);
-    (bool success, ) = _newImpl.delegatecall(data);
-    require(success);
+    // TODO: upgrade to new implementation and call initialize
   }
 }

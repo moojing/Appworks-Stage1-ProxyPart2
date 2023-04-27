@@ -22,33 +22,23 @@ contract UUPSTest is Test {
     clock = new ClockUUPS();
     clockV2 = new ClockUUPSV2();
     vm.prank(admin);
-    alarm1Time = 2023_4_27;
-    bytes memory initilizeData = abi.encodeWithSignature("initialize(uint256)", alarm1Time);
-    uupsProxy = new UUPSProxy(initilizeData, address(clock));
+    // initialize UUPS proxy
   }
 
-  function testProxyWorks(uint256 _alarm1) public {
+  function testProxyWorks() public {
     // check Clock functionality is successfully proxied
-    ClockUUPS clockProxy = ClockUUPS(address(uupsProxy));
-    clockProxy.setAlarm1(_alarm1);
-    assertEq(clockProxy.alarm1(), _alarm1);
-    assertEq(clockProxy.getTimestamp(), block.timestamp);
   }
 
-  function testUpgradeToWorks(uint256 _alarm1, uint256 _alarm2) public {
-    ClockUUPS(address(uupsProxy)).upgradeTo(address(clockV2));
-    ClockUUPSV2 clockProxy = ClockUUPSV2(address(uupsProxy));
-    clockProxy.setAlarm1(_alarm1);
-    clockProxy.setAlarm2(_alarm2);
-
-    assertEq(clockProxy.alarm1(), _alarm1);
-    assertEq(clockProxy.alarm2(), _alarm2);
+  function testUpgradeToWorks() public {
+    // check upgradeTo works aswell
   }
 
-  function testCantUpgrade(uint256 _alarm1, uint256 _alarm2) public {
-    ClockUUPS clockUUPS = ClockUUPS(address(uupsProxy));
-    clockUUPS.upgradeTo(address(clockV2));
-    vm.expectRevert();
-    clockUUPS.upgradeTo(address(clock));
+  function testCantUpgrade() public {
+    // check upgradeTo should fail if implementation doesn't inherit Proxiable
   }
+  
+  function testCantUpgradeIfLogicDoesntHaveUpgradeFunction() public {
+    // check upgradeTo should fail if implementation doesn't implement upgradeTo
+  }
+
 }
