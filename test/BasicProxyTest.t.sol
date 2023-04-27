@@ -20,47 +20,29 @@ contract BasicProxyTest is Test {
   }
 
   function testProxyWorks() public {
-    // check Clock functionality is successfully proxied
-    Clock clockProxy = Clock(address(basicProxy));
-    clockProxy.setAlarm1(100);
-    assertEq(clockProxy.alarm1(), 100);
-    assertEq(clockProxy.getTimestamp(), block.timestamp);
+    // TODO: check Clock functionality is successfully proxied
   }
 
   function testInitialize() public {
-    // check initialize works
-    Clock clockProxy = Clock(address(basicProxy));
-    clockProxy.initialize(100);
-    assertEq(clockProxy.alarm1(), 100);
+    // TODO: check initialize works
   }
 
   function testUpgrade() public {
 
-    // check Clock functionality is successfully proxied
-    Clock clockProxy = Clock(address(basicProxy));
-    clockProxy.setAlarm1(100);
-    assertEq(clockProxy.alarm1(), 100);
-    assertEq(clockProxy.alarm2(), 0);
-    assertEq(clockProxy.getTimestamp(), block.timestamp);
+    // TODO: check Clock functionality is successfully proxied
 
-    // shouldn't be able to setAlarm2
-    ClockV2 clockProxyV2 = ClockV2(address(basicProxy));
-    vm.expectRevert();
-    clockProxyV2.setAlarm2(100);
-
-    // upgrade
-    basicProxy.upgradeTo(address(clockV2));
+    // upgrade Logic contract to ClockV2
     // check state hadn't been changed
-    assertEq(clockProxyV2.alarm1(), 100);
-    assertEq(clockProxyV2.alarm2(), 0);
     // check new functionality is available
-    clockProxyV2.setAlarm2(100);
-    assertEq(clockProxyV2.alarm2(), 100);
   }
 
   function testUpgradeAndCall() public {
-    // calling initialize right after upgrade
-    basicProxy.upgradeToAndCall(address(clockV2), abi.encodeWithSignature("initialize(uint256)", 100));
-    assertEq(ClockV2(address(basicProxy)).alarm1(), 100);
+    // TODO: calling initialize right after upgrade
+    // check state had been changed according to initialize
+  }
+
+  function testChangeOwnerWontCollision() public {
+    // TODO: call changeOwner to update owner
+    // check Clock functionality is successfully proxied
   }
 }
