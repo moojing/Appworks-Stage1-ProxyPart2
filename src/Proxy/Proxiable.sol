@@ -11,13 +11,17 @@ contract Proxiable is Slots {
     }
 
     function updateCodeAddress(address newAddress) internal {
-        // TODO: check if target address has proxiableUUID
-        // update code address
-        require(
-            Proxiable(newAddress).proxiableUUID() == proxiableUUID(),
-            "Not compatible"
-        );
+        // ✅TODO: check if target address has proxiableUUID
+        // ✅update code address
 
-        _setSlotToAddress(IMPL_ADDRESS, newAddress);
+        try Proxiable(newAddress).proxiableUUID() {
+            require(
+                Proxiable(newAddress).proxiableUUID() == proxiableUUID(),
+                "Not compatible with UUPS proxy"
+            );
+            _setSlotToAddress(IMPL_ADDRESS, newAddress);
+        } catch {
+            revert("Not compatible with UUPS proxy");
+        }
     }
 }
