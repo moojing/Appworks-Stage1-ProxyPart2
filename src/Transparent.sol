@@ -40,6 +40,13 @@ contract Transparent is Slots, BasicProxy {
 
     fallback() external payable override {
         // rewrite fallback
+        require(
+            msg.sender !=
+                _getSlotToAddress(
+                    bytes32(uint256(keccak256("eip1967.proxy.admin")) - 1)
+                ),
+            "Admin cannot call fallback function"
+        );
         _fallback();
     }
 }

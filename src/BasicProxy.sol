@@ -12,15 +12,9 @@ contract BasicProxy is Proxy, Slots {
         _setSlotToAddress(IMPL_ADDRESS, _implementation);
     }
 
-    function _fallback() internal virtual override {
+    function _fallback() internal virtual {
         _delegate(_getSlotToAddress(IMPL_ADDRESS));
     }
-
-    fallback() external payable virtual {
-        _delegate(_getSlotToAddress(IMPL_ADDRESS));
-    }
-
-    receive() external payable {}
 
     function upgradeTo(address _newImpl) public virtual {
         _setSlotToAddress(IMPL_ADDRESS, _newImpl);
@@ -38,4 +32,10 @@ contract BasicProxy is Proxy, Slots {
         (bool success, ) = _newImpl.delegatecall(data);
         require(success);
     }
+
+    fallback() external payable virtual {
+        _delegate(_getSlotToAddress(IMPL_ADDRESS));
+    }
+
+    receive() external payable {}
 }
