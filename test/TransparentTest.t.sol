@@ -10,6 +10,7 @@ contract TransparentTest is Test {
     Clock public clock;
     ClockV2 public clockV2;
     Clock public clockProxy;
+    ClockV2 public clockV2Proxy;
     Transparent public transparentProxy;
     uint256 public alarm1Time;
 
@@ -24,10 +25,11 @@ contract TransparentTest is Test {
         vm.prank(admin);
         transparentProxy = new Transparent(address(clock));
         clockProxy = Clock(address(transparentProxy));
+        clockV2Proxy = ClockV2(address(transparentProxy));
     }
 
     function testProxyWorks(uint256 _alarm1) public {
-        // check Clock functionality is successfully proxied
+        //✅check Clock functionality is successfully proxied
 
         clockProxy.setAlarm1(1);
         assertEq(clockProxy.alarm1(), 1);
@@ -35,7 +37,7 @@ contract TransparentTest is Test {
 
     // 參數是啥
     function testUpgradeToOnlyAdmin(uint256 _alarm1, uint256 _alarm2) public {
-        // check upgradeTo could be called only by admin
+        // ✅check upgradeTo could be called only by admin
 
         vm.startPrank(admin);
         transparentProxy.upgradeTo(address(clockV2));
@@ -45,9 +47,9 @@ contract TransparentTest is Test {
         vm.expectRevert("Transparent: not admin");
         transparentProxy.upgradeTo(address(clockV2));
 
-        ClockV2 clockProxyV2 = ClockV2(address(transparentProxy));
-        clockProxyV2.setAlarm2(_alarm2);
-        assertEq(clockProxyV2.alarm2(), _alarm2);
+        // ClockV2 clockProxyV2 = ClockV2(address(transparentProxy));
+        // clockProxyV2.setAlarm2(_alarm2);
+        // assertEq(clockProxyV2.alarm2(), _alarm2);
         vm.stopPrank();
     }
 
@@ -55,7 +57,9 @@ contract TransparentTest is Test {
         uint256 _alarm1,
         uint256 _alarm2
     ) public {
-        // check upgradeToAndCall could be called only by admin
+        // ✅check upgradeToAndCall could be called only by admin
+        // ✅check initialized state is true after upgradeToAndCall
+
         vm.startPrank(admin);
         transparentProxy.upgradeToAndCall(
             address(clockV2),
@@ -70,15 +74,12 @@ contract TransparentTest is Test {
             abi.encodeWithSignature("initialize(uint256)", 1234567890)
         );
 
-        ClockV2 clockProxyV2 = ClockV2(address(transparentProxy));
-        clockProxyV2.setAlarm2(_alarm2);
-        assertEq(clockProxyV2.alarm2(), _alarm2);
-        assertEq(clockProxyV2.initialized(), true);
+        assertEq(clockV2Proxy.initialized(), true);
         vm.stopPrank();
     }
 
     function testFallbackShouldRevertIfSenderIsAdmin(uint256 _alarm1) public {
-        // check admin shouldn't trigger fallback
+        // ✅check admin shouldn't trigger fallback
         vm.startPrank(admin);
         vm.expectRevert("Admin cannot call fallback function");
         clockProxy.setAlarm1(_alarm1);
@@ -88,7 +89,7 @@ contract TransparentTest is Test {
     function testFallbackShouldSuccessIfSenderIsntAdmin(
         uint256 _alarm1
     ) public {
-        // check admin shouldn't trigger fallback
+        // ✅check normal user should trigger fallback
         vm.startPrank(user1);
         clockProxy.setAlarm1(_alarm1);
         assertEq(clockProxy.alarm1(), _alarm1);

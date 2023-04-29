@@ -21,7 +21,7 @@ contract SlotManipulateTest is Test {
     }
 
     function testValueSet() public {
-        // TODO: set bytes32(keccak256("appwork.week8"))
+        // TODO: ✅set bytes32(keccak256("appwork.week8"))
         instance.setAppworksWeek8(2023_4_27);
         // Assert that the value is set
         assertEq(
@@ -36,8 +36,8 @@ contract SlotManipulateTest is Test {
     }
 
     function testSetProxyImplementation() public {
-        // TODO: set Proxy Implementation address
-        // Assert that the value is set
+        // ✅TODO: set Proxy Implementation address
+        // ✅Assert that the value is set
         instance.setProxyImplementation(randomAddress);
         assertEq(
             bytes32ToAddress(
@@ -53,8 +53,8 @@ contract SlotManipulateTest is Test {
     }
 
     function testSetBeaconImplementation() public {
-        // TODO: set Beacon Implementation address
-        // Assert that the value is set
+        // ✅TODO: set Beacon Implementation address
+        // ✅Assert that the value is set
         instance.setBeaconImplementation(randomAddress);
         assertEq(
             bytes32ToAddress(
@@ -68,8 +68,8 @@ contract SlotManipulateTest is Test {
     }
 
     function testSetAdminImplementation() public {
-        // TODO: set admin address
-        // Assert that the value is set
+        // ✅TODO: set admin address
+        // ✅Assert that the value is set
         instance.setAdminImplementation(randomAddress);
         assertEq(
             bytes32ToAddress(
@@ -83,8 +83,8 @@ contract SlotManipulateTest is Test {
     }
 
     function testSetProxiableImplementation() public {
-        // TODO: set Proxiable address
-        // Assert that the value is set
+        // ✅TODO: set Proxiable address
+        // ✅Assert that the value is set
         instance.setProxiable(randomAddress);
         assertEq(
             bytes32ToAddress(
