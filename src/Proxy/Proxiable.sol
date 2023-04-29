@@ -14,14 +14,14 @@ contract Proxiable is Slots {
         // ✅TODO: check if target address has proxiableUUID
         // ✅update code address
 
-        try Proxiable(newAddress).proxiableUUID() {
-            require(
-                Proxiable(newAddress).proxiableUUID() == proxiableUUID(),
-                "Not compatible with UUPS proxy"
-            );
-            _setSlotToAddress(IMPL_ADDRESS, newAddress);
-        } catch {
-            revert("Not compatible with UUPS proxy");
-        }
+        (bool success, bytes memory result) = address(newAddress).call(
+            abi.encodeWithSignature("proxiableUUID()")
+        );
+        // use this line will cause error
+        // bytes32 targetUUID = abi.decode(result, (bytes32));
+        require(
+            success && abi.decode(result, (bytes32)) == proxiableUUID(),
+            "Not compatible with UUPS proxy"
+        );
     }
 }
