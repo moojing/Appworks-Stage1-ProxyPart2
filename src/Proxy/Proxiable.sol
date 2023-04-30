@@ -3,7 +3,7 @@ pragma solidity ^0.8.17;
 import {Slots} from "../SlotManipulate.sol";
 
 contract Proxiable is Slots {
-    bytes32 IMPL_ADDRESS = keccak256("PROXIABLE");
+    bytes32 constant IMPL_ADDRESS = keccak256("PROXIABLE");
 
     function proxiableUUID() public pure returns (bytes32) {
         return
@@ -15,10 +15,9 @@ contract Proxiable is Slots {
         // ✅update code address
 
         (bool success, bytes memory result) = address(newAddress).call(
-            abi.encodeWithSignature("proxiableUUID()")
+            abi.encodeCall(Proxiable(newAddress).proxiableUUID, ())
         );
-        // use this line will cause error
-        // bytes32 targetUUID = abi.decode(result, (bytes32));
+
         require(
             success && abi.decode(result, (bytes32)) == proxiableUUID(),
             "Not compatible with UUPS proxy"
